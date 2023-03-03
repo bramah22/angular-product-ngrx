@@ -1,5 +1,7 @@
 import {Product} from "../models/product.model";
 import {
+  DeleteProductActionError,
+  DeleteProductActionSuccess,
   GetAllProductActionError,
   GetAllProductActionSuccess,
   ProductActions,
@@ -107,6 +109,27 @@ export function productReducer(state: ProductsState = initState, action: Action)
         ...state!,
         dataState: ProductStateEnum.ERROR,
         errorMessage: (action as SelectProductActionError).payload
+      };
+
+      /* Delete Product*/
+    case ProductsActionTypes.DELETE_PRODUCT:
+      return {
+        ...state!,
+        dataState: ProductStateEnum.LOADING
+      } ;// on clone le state et on modifie l'attribut dataState
+    case ProductsActionTypes.DELETE_PRODUCT_SUCCESS:
+      const p = (action as DeleteProductActionSuccess).payload;
+      const data: Product[] = [...state.products];
+      return {
+        ...state!,
+        dataState: ProductStateEnum.LOADED,
+        products: data.splice(data.indexOf(p) , 1)
+      };
+    case ProductsActionTypes.DELETE_PRODUCT_ERROR:
+      return {
+        ...state!,
+        dataState: ProductStateEnum.ERROR,
+        errorMessage: (action as DeleteProductActionError).payload
       };
     default:
       return state!;

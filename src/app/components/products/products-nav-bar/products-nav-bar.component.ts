@@ -22,4 +22,8 @@ export class ProductsNavBarComponent {
   onSearch(dataForm: any) {
     this.store.dispatch(new SearchProductAction(dataForm.keyword))
   }
+
+  onNewProduct() {
+
+  }
 }

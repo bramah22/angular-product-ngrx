@@ -4,6 +4,8 @@ import {Actions, createEffect, ofType} from "@ngrx/effects";
 import {catchError, map, mergeMap, Observable, of} from "rxjs";
 import {Action} from "@ngrx/store";
 import {
+  DeleteProductActionError,
+  DeleteProductActionSuccess,
   GetAllProductActionError,
   GetAllProductActionSuccess,
   GetSelectedProductActionError,
@@ -77,6 +79,20 @@ export class ProductsEffects {
           .pipe(
             map((product: Product) => new SelectProductActionSuccess(product)),
             catchError(err => of(new SelectProductActionError(err.message)))
+          )
+      })
+    );
+  });
+
+  /* Delete Products*/
+  DeleteProductEffect: Observable<ProductActions> = createEffect(() => {
+    return this.effectAction.pipe(
+      ofType(ProductsActionTypes.DELETE_PRODUCT),
+      mergeMap((action: ProductActions) => {
+        return this.productService.delete(action.payload.id)
+          .pipe(
+            map(() => new DeleteProductActionSuccess(action.payload)),
+            catchError(err => of(new DeleteProductActionError(err.message)))
           )
       })
     );

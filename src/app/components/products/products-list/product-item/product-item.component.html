@@ -10,4 +10,14 @@
       <span> {{ product.selected ? 'Unselect' : 'Select'}} </span>
     </button>
   </td>
+  <td>
+    <button class="btn btn-danger" (click)="onDelete(product)">
+      <span class="fa fa-trash-o"> </span>
+    </button>
+  </td>
+  <td>
+    <button class="btn btn-info" (click)="onEdit(product)">
+      <span class="fa fa-edit"> </span>
+    </button>
+  </td>
 </tr>
