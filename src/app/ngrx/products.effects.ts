@@ -5,9 +5,15 @@ import {catchError, map, mergeMap, Observable, of} from "rxjs";
 import {Action} from "@ngrx/store";
 import {
   GetAllProductActionError,
-  GetAllProductActionSuccess, GetSelectedProductActionError,
-  GetSelectedProductActionSuccess, ProductActions,
-  ProductsActionTypes, SearchProductActionError, SearchProductActionSuccess
+  GetAllProductActionSuccess,
+  GetSelectedProductActionError,
+  GetSelectedProductActionSuccess,
+  ProductActions,
+  ProductsActionTypes,
+  SearchProductActionError,
+  SearchProductActionSuccess,
+  SelectProductActionError,
+  SelectProductActionSuccess
 } from "./products.actions";
 import {Product} from "../models/product.model";
 
@@ -57,6 +63,20 @@ export class ProductsEffects {
           .pipe(
             map((products: Product[]) => new SearchProductActionSuccess(products)),
             catchError(err => of(new SearchProductActionError(err.message)))
+          )
+      })
+    );
+  });
+
+  /* Selecte Products*/
+  SelectProductEffect: Observable<ProductActions> = createEffect(() => {
+    return this.effectAction.pipe(
+      ofType(ProductsActionTypes.SELECT_PRODUCT),
+      mergeMap((action: ProductActions) => {
+        return this.productService.setSelected(action.payload)
+          .pipe(
+            map((product: Product) => new SelectProductActionSuccess(product)),
+            catchError(err => of(new SelectProductActionError(err.message)))
           )
       })
     );
